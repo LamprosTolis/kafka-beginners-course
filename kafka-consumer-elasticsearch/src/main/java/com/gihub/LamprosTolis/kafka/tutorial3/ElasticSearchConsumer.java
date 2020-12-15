@@ -1,5 +1,6 @@
 package com.gihub.LamprosTolis.kafka.tutorial3;
 
+import com.google.gson.JsonParser;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -31,9 +32,9 @@ public class ElasticSearchConsumer {
     public static RestHighLevelClient createClient(){
 
         //To-Do Enter the credentials
-        String hostname = "";
-        String username = "";
-        String password = "";
+        String hostname = "kafka-course-3880907854.eu-central-1.bonsaisearch.net";
+        String username = "jej2gelzhg";
+        String password = "2c9jo0iah6";
 
         //don't run it if you run a local ES
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
@@ -85,15 +86,23 @@ public class ElasticSearchConsumer {
             for (ConsumerRecord<String, String> record : records){
                // where we insert data to elasticSearch
 
+                // 2 strategies
+
+                // kafka generic ID
+                //String id = record.topic() + "_" + record.partition() + "_" + record.offset();
+
+                // twitter feed specific ID
+                String id = ExtractIdFromTweet(record.value());
 
                 IndexRequest indexRequest = new IndexRequest(
-                        "twitter,",
-                        "tweets"
+                        "twitter",
+                        "tweets",
+                        id// this is to make our consumer idempotent
                 ).source(record.value(), XContentType.JSON);
 
                 IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
-                String id = indexResponse.getId();
-                logger.info(id);
+
+                logger.info(indexResponse.getId());
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -102,8 +111,16 @@ public class ElasticSearchConsumer {
 
             }
         }
-
         //close the client gracefully
         //client.close();
+    }
+
+    private static JsonParser jsonParser = new JsonParser();
+    private static String ExtractIdFromTweet(String tweetJson) {
+        // gson library
+        return jsonParser.parse(tweetJson)
+                    .getAsJsonObject()
+                    .get("id_str")
+                    .getAsString();
     }
 }

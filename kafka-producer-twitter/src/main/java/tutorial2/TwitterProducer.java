@@ -25,12 +25,13 @@ public class TwitterProducer {
 
     Logger logger = LoggerFactory.getLogger(TwitterProducer.class.getName());
 
-    private final String consumerKey = "consumerKey";
-    private final String consumerSecret = "consumerSecret";
-    private final String token = "token";
-    private final String secret = "secret";
+    // Have been regenerated, create your own through your twitter account
+    private final String consumerKey = "dnpVA8HshpQrtuDHBXaUamHCL";
+    private final String consumerSecret = "16kYwV4VZNYn1GxAcHTVSRwPEAA17llZAZo2DF2xLElxdvM7E1";
+    private final String token = "2658155748-uWTGKfa6CUAEOzD0d9rrtq2K2I2FlJlu9aDFseN";
+    private final String secret = "utxSdKMaP4KANyJ6jYHZYAh4kWvrJvRskVLKT5d0KyX3b";
 
-    List<String> terms = Lists.newArrayList("kafka","Greece","covid19","covid");
+    List<String> terms = Lists.newArrayList("Greece","covid");
 
     public TwitterProducer(){
 
@@ -129,7 +130,7 @@ public class TwitterProducer {
         properties.setProperty(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG,"true");
         properties.setProperty(ProducerConfig.ACKS_CONFIG,"all");
         properties.setProperty(ProducerConfig.RETRIES_CONFIG,Integer.toString(Integer.MAX_VALUE));
-        properties.setProperty(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION,Integer.toString(Integer.MAX_VALUE)); //kafka 2.0 >= kafka 1.1 so we can keep this as 5. Use 1 otherwise.
+        properties.setProperty(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION,"5"); //kafka 2.0 >= kafka 1.1 so we can keep this as 5. Use 1 otherwise.
 
         // high throughput producer (at the expense of a bit of latency and CPU usage)
         properties.setProperty(ProducerConfig.COMPRESSION_TYPE_CONFIG,"snappy");
