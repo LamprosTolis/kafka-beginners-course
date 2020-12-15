@@ -1,4 +1,4 @@
-package com.github.LamprosTolis.kafka.tutorial1;
+package tutorial1;
 
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
