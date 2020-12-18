@@ -1,6 +1,7 @@
 package com.gihub.LamprosTolis.kafka.tutorial3;
 
 import com.google.gson.JsonParser;
+import jdk.jfr.Description;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -132,6 +133,7 @@ public class ElasticSearchConsumer {
     }
 
     private static JsonParser jsonParser = new JsonParser();
+
     private static String ExtractIdFromTweet(String tweetJson) {
         // gson library
         return jsonParser.parse(tweetJson)

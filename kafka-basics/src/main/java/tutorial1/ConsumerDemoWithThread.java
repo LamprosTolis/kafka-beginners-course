@@ -19,11 +19,11 @@ public class ConsumerDemoWithThread {
         new ConsumerDemoWithThread().run();
     }
 
-    private ConsumerDemoWithThread(){
+    private ConsumerDemoWithThread() {
 
     }
 
-    private void run(){
+    private void run() {
 
         Logger logger = LoggerFactory.getLogger(ConsumerDemoWithThread.class.getName());
 
@@ -36,14 +36,14 @@ public class ConsumerDemoWithThread {
 
         //create the consumer runnable
         logger.info("Creating the consumer thread");
-        Runnable myConsumerRunnable = new ConsumerRunnable(bootstrapServers,groupId,topic,latch);
+        Runnable myConsumerRunnable = new ConsumerRunnable(bootstrapServers, groupId, topic, latch);
 
         // start the thread
         Thread myThread = new Thread(myConsumerRunnable);
         myThread.start();
 
         // add shutdown hook
-        Runtime.getRuntime().addShutdownHook(new Thread( () -> {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             logger.info("Cought shutdown hook");
             ((ConsumerRunnable) myConsumerRunnable).shutdown();
             try {
@@ -72,12 +72,12 @@ public class ConsumerDemoWithThread {
         private KafkaConsumer<String, String> consumer;
         private Logger logger = LoggerFactory.getLogger(ConsumerRunnable.class.getName());
 
-        public ConsumerRunnable(String bootstrapServers, String groupId, String topic, CountDownLatch latch){
+        public ConsumerRunnable(String bootstrapServers, String groupId, String topic, CountDownLatch latch) {
             this.latch = latch;
 
             // create consumer config
             Properties properties = new Properties();
-            properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,bootstrapServers);
+            properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
             properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
             properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
             properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
@@ -93,15 +93,15 @@ public class ConsumerDemoWithThread {
         public void run() {
             //poll for new data
             try {
-                while(true){
+                while (true) {
                     ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100)); // new in Kafka 2.0.0
 
-                    for (ConsumerRecord<String, String> record : records){
+                    for (ConsumerRecord<String, String> record : records) {
                         logger.info("Key: " + record.key() + ", Value: " + record.value());
                         logger.info("Partition: " + record.partition() + ", Offset: " + record.offset());
                     }
                 }
-            }catch (WakeupException e){
+            } catch (WakeupException e) {
                 logger.info("Received shutdown signal!");
             } finally {
                 consumer.close();
@@ -110,7 +110,7 @@ public class ConsumerDemoWithThread {
             }
         }
 
-        public void shutdown(){
+        public void shutdown() {
             // wakeup() method is a special method to interrupt consumer.poll()
             // will throw exception WakeUpException
             consumer.wakeup();

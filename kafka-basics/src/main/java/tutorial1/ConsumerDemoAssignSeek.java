@@ -24,7 +24,7 @@ public class ConsumerDemoAssignSeek {
 
         // create consumer config
         Properties properties = new Properties();
-        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,boostrapServers);
+        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, boostrapServers);
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
@@ -40,21 +40,21 @@ public class ConsumerDemoAssignSeek {
         consumer.assign(Arrays.asList(partitionToReadFrom));
 
         // seek
-        consumer.seek(partitionToReadFrom,offsetToReadFrom);
+        consumer.seek(partitionToReadFrom, offsetToReadFrom);
 
         int numberOfMessagesToRead = 5;
         boolean keepOnReading = true;
         int numberOfMessagesReadSoFar = 0;
 
         //poll for new data
-        while(keepOnReading){
+        while (keepOnReading) {
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100)); // new in Kafka 2.0.0
 
-            for (ConsumerRecord<String, String> record : records){
+            for (ConsumerRecord<String, String> record : records) {
                 numberOfMessagesReadSoFar += 1;
                 logger.info("Key: " + record.key() + ", Value: " + record.value());
                 logger.info("Partition: " + record.partition() + ", Offset: " + record.offset());
-                if(numberOfMessagesReadSoFar >= numberOfMessagesToRead){
+                if (numberOfMessagesReadSoFar >= numberOfMessagesToRead) {
                     keepOnReading = false; // to exit the while loop
                     break;
                 }

@@ -18,12 +18,12 @@ public class ProducerDemoKeys {
         Properties properties = new Properties();
         properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,StringSerializer.class.getName());
+        properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
         // create the producer
         KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties);
 
-        for(int i=0;i<10;i++) {
+        for (int i = 0; i < 10; i++) {
 
             String topic = "first_topic";
             String value = "Counting: -> " + Integer.toString(i);
@@ -44,7 +44,6 @@ public class ProducerDemoKeys {
             //id_7 is going to partition 2
             //id_8 is going to partition 1
             //id_9 is going to partition 2
-
 
 
             // send data - asynchronous
